@@ -1,23 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from "axios";
 
 function App() {
+
+  useEffect(() => {
+    axios.get("/api/values")
+    .then(res => {
+      console.log("res", res);
+      setLists(res.data)
+    })
+  }, []);
+
+  const [lists, setLists] = useState([]);
+  const [value, setValue] = useState("");
+
+  const changeHandler = (event) => {
+    setValue(event.currentTarget.value)
+  }
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    axios.post(`/api/value`, {value})
+    .then(res => {
+      if(res.data.success) {
+        console.log("res", res);
+        setLists([...lists, res.data]);
+        setValue("");
+      } else {
+        alert("값을 DB에 넣는데 실패했습니다.");
+      }
+    })
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="constainer">
+
+          {lists && lists.map((list, index) => (
+            <li key={index}>{list.value}</li>
+          ))}
+
+          <form className="example" onSubmit={submitHandler}>
+            <input type="text" placeholder="입력해주세요.." onChange={changeHandler} value={value}/>
+            <button type="submit">전송</button>
+          </form>
+        </div>
       </header>
     </div>
   );

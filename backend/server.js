@@ -36,9 +36,6 @@ app.post("/api/value", function(req, res, next) {
 })
 
 
-
-
-
 app.listen(5000, () => {
     console.log("어플리케이션 서버 5000번 포트에서 되었습니다.")
 });
