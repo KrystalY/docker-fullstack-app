@@ -6,7 +6,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t KrystalY/docker-fullstack-app -f ./frontend/Dockerfile.dev ./frontend
+  - docker build -t KrystalY/docker-fullstack-app -f ./frontend/dockerfile.dev ./frontend
 
 script:
   - docker run -e CI=true KrystalY/docker-fullstack-app npm run test
